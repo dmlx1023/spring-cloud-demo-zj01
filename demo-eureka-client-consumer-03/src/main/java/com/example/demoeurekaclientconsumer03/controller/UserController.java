@@ -21,6 +21,7 @@ public class UserController {
     private RestTemplate restTemplate;
 
     @GetMapping("userList/{id}")
+    @HystrixCommand(fallbackMethod = "failFallback")
     public List getUserList(@PathVariable int id) {
         ResponseEntity<List> l = restTemplate.getForEntity("http://eureka-client-01-provider/v1/userlist?id={1}", List.class, id);
         return l.getBody();
@@ -33,7 +34,7 @@ public class UserController {
         params.add("id", id);
         params.add("name", name);
         HttpEntity h = new HttpEntity(params,null);
-//        Map map = new HashMap();
+//        Map map =  new HashMap();
 //        map.put("id", id);
 //        map.put("name", name);
 //
@@ -43,8 +44,13 @@ public class UserController {
 
     }
 
-    public List failFallback(){
+    public List failFallback( String id, String name){
         List l = Lists.newArrayList("失败");
+        return l;
+    }
+
+    public List failFallback( int id){
+        List l = Lists.newArrayList("失败laaalaaaaaaaaa");
         return l;
     }
 }
