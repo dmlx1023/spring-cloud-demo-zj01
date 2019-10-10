@@ -11,15 +11,12 @@ import java.util.List;
 public class HelloController {
 
     @GetMapping("userlist")
-    public List getUserList(int id) {
+    public List getUserList(@RequestParam(required = false) Object id) {
         List l = new ArrayList();
-        l.add(1);
-        l.add(6);
-        l.add(2);
+//        l.add(1);
+//        l.add(6);
+//        l.add(2);
         l.add(id);
-        if (RandomUtils.nextBoolean()){
-            throw new IllegalStateException("2222222222222222");
-        }
         return l;
 
     }

@@ -3,7 +3,6 @@ package com.example.demonacosconfig.controller;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.context.refresh.ContextRefresher;
 import org.springframework.cloud.endpoint.event.RefreshEvent;
