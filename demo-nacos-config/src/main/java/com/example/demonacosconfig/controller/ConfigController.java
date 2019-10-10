@@ -4,12 +4,14 @@ import com.example.demonacosconfig.config.OrdConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/config")
-//@RefreshScope
+@RefreshScope
+//@Scope("refresh")
 public class ConfigController {
 
     @Value("${useLocalCache:false}")
@@ -22,6 +24,6 @@ public class ConfigController {
     private OrdConfiguration configuration;
     @RequestMapping("/get")
     public String get() {
-        return configuration.getName();
+        return name;
     }
 }
