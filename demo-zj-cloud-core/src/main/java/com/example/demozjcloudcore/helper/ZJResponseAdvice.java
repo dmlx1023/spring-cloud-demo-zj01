@@ -41,7 +41,6 @@ public class ZJResponseAdvice implements ResponseBodyAdvice {
 
     @ExceptionHandler(BusinessException.class)
     public BaseResponse handleException(Exception e) {
-
         String errorMessage = e.getMessage();
         if (StringUtil.isEmpty(errorMessage)) {
             errorMessage = ReturnCode.BIZ_ERROR.getMessage();

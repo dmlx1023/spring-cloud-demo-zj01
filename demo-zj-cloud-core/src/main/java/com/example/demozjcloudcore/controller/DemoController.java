@@ -88,4 +88,10 @@ public class DemoController {
         }
         return user;
     }
+
+    @RequestMapping("t10")
+    private ResponseEntity<User> h10() {
+        User user = new User("我是名称", "我是id");
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 }
