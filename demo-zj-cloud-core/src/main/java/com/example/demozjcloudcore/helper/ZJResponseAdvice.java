@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+/**
+ * @author duanmulixiang
+ */
 @RestControllerAdvice
 public class ZJResponseAdvice implements ResponseBodyAdvice {
     @Override

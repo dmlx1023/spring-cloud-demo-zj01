@@ -1,10 +1,10 @@
 package com.example.demozjcloudcore.controller;
 
 import com.example.demozjcloudcore.helper.ResponseHelper;
-import com.example.demozjcloudcore.helper.User;
 import com.example.demozjcloudcore.helper.ZJResponse;
 import com.zijinph.core.dto.BaseResponse;
 import com.zijinph.core.enums.ReturnCode;
+import com.zijinph.core.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,5 +78,14 @@ public class DemoController {
     private BaseResponse<User> h8() {
         User user = new User("我是名称", "我是id");
         return ResponseHelper.success(user);
+    }
+
+    @RequestMapping("t9")
+    private User h9() {
+        User user = new User("我是名称", "我是id");
+        if (Boolean.TRUE) {
+            throw new BusinessException("我是业务异常！");
+        }
+        return user;
     }
 }

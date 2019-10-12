@@ -1,4 +1,4 @@
-package com.example.demozjcloudcore.helper;
+package com.example.demozjcloudcore.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
