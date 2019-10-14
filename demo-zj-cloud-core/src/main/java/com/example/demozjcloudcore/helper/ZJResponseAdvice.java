@@ -21,7 +21,11 @@ public class ZJResponseAdvice implements ResponseBodyAdvice {
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
         ZJResponse[] clzz = returnType.getDeclaringClass().getAnnotationsByType(ZJResponse.class);
-        return clzz.length > 0;
+        ZJResponse methAnnoation = returnType.getMethodAnnotation(ZJResponse.class);
+        if (clzz.length == 0 && methAnnoation==null){
+            return false;
+        }
+        return true;
     }
 
     @Override

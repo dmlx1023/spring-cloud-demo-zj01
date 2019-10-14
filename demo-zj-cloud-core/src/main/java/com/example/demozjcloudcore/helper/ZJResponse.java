@@ -3,7 +3,7 @@ package com.example.demozjcloudcore.helper;
 import java.lang.annotation.*;
 
 @Documented
-@Target({ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ZJResponse {
 }

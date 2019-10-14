@@ -24,6 +24,7 @@ public class DemoController {
     }
 
     @RequestMapping("t2")
+    @ZJResponse
     private User h2() {
         User user = new User("我是名称", "我是id");
         return user;
