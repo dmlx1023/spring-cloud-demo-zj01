@@ -1,14 +1,15 @@
 package com.example.demozjcloudcore.helper;
 
-import org.joda.time.*;
-import org.joda.time.format.DateTimeFormat;
-
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class ZJDateUtil {
 
-    private static DateTime dateTime;
 
     /**
      * 前一个
@@ -55,25 +56,35 @@ public class ZJDateUtil {
     public static final String FORMAT_TYPE_9 = "yyyy-MM-dd-HH-mm-ss.SSS";
     public static final String FORMAT_TYPE_10 = "yyyyMMddHHmmssSSS";
 
+
     /**
-     * 获取DateTime对象
+     * 根据给定时间构建一个localdatetime对象
      *
-     * @return 返回一个joda的时间实例
+     * @param date
+     * @return 返回一个localdatetime实例
      */
-    public static DateTime getDateTime() {
-        dateTime = new DateTime();
-        return dateTime;
+    public static LocalDateTime getLocalDateTime(Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 
     /**
-     * 根据给定时间构建一个DateTime对象
+     * 根据给定时间构建一个Date对象
      *
-     * @param date
-     * @return 返回一个joda的时间实例
+     * @param localDateTime
+     * @return 返回一个Date实例
      */
-    public static DateTime getDateTime(Date date) {
-        dateTime = new DateTime(date.getTime());
-        return dateTime;
+    public static Date getDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * 获取本地时区的formatter
+     *
+     * @param pattern
+     * @return
+     */
+    private static DateTimeFormatter getDateFormatter(String pattern) {
+        return new DateTimeFormatterBuilder().appendPattern(pattern).toFormatter();
     }
 
     /**
@@ -85,8 +96,7 @@ public class ZJDateUtil {
      * @return 返回一个java.util.Date的时间实例
      */
     public static Date newDate(int year, int month, int day) {
-        dateTime = new DateTime(year, month, day, 0, 0);
-        return dateTime.toDate();
+        return Date.from(LocalDateTime.of(year, month, day, 0, 0).atZone(ZoneId.systemDefault()).toInstant());
     }
 
     /**
@@ -101,8 +111,7 @@ public class ZJDateUtil {
      * @return 返回一个java.util.Date的时间实例
      */
     public static Date newDate(int year, int month, int day, int hour, int minute, int second) {
-        dateTime = new DateTime(year, month, day, hour, minute, second);
-        return dateTime.toDate();
+        return Date.from(LocalDateTime.of(year, month, day, hour, minute, second).atZone(ZoneId.systemDefault()).toInstant());
     }
 
     /**
@@ -111,7 +120,7 @@ public class ZJDateUtil {
      * @return 返回一个java.util.Date的时间实例
      */
     public static Date now() {
-        return DateTime.now().toDate();
+        return new Date();
     }
 
     /**
@@ -122,8 +131,8 @@ public class ZJDateUtil {
      * @return 返回一个java.util.Date的时间实例
      */
     public static Date offsetDate(Date date, int step) {
-        dateTime = new DateTime(date.getTime());
-        return dateTime.plusDays(step).toDate();
+        LocalDateTime dateTime = getLocalDateTime(date).plusDays(step);
+        return getDate(dateTime);
     }
 
     /**
@@ -152,8 +161,8 @@ public class ZJDateUtil {
      * @return 返回一个java.util.Date的时间实例
      */
     public static Date offsetMonth(Date date, int step) {
-        dateTime = new DateTime(date.getTime());
-        return dateTime.plusMonths(step).toDate();
+        LocalDateTime localDateTime = getLocalDateTime(date);
+        return getDate(localDateTime.plusMonths(step));
     }
 
     /**
@@ -182,8 +191,8 @@ public class ZJDateUtil {
      * @return 返回一个java.util.Date的时间实例
      */
     public static Date offsetHour(Date date, int step) {
-        dateTime = new DateTime(date.getTime());
-        return dateTime.plusHours(step).toDate();
+        LocalDateTime localDateTime = getLocalDateTime(date);
+        return getDate(localDateTime.plusHours(step));
     }
 
     /**
@@ -229,9 +238,9 @@ public class ZJDateUtil {
      * @param step
      * @return 返回一个java.util.Date的时间实例
      */
-    public static Date offsetMinus(Date date, int step) {
-        dateTime = new DateTime(date.getTime());
-        return dateTime.plusMinutes(step).toDate();
+    public static Date offsetMinutes(Date date, int step) {
+        LocalDateTime localDateTime = getLocalDateTime(date);
+        return getDate(localDateTime.plusMinutes(step));
     }
 
     /**
@@ -240,7 +249,7 @@ public class ZJDateUtil {
      * @param date
      * @return 返回一个java.util.Date的时间实例
      */
-    public static Date preMinus(Date date) {
+    public static Date preMinutes(Date date) {
         return offsetDate(date, PREVIOUS);
     }
 
@@ -249,8 +258,8 @@ public class ZJDateUtil {
      *
      * @return 返回一个java.util.Date的时间实例
      */
-    public static Date preMinus() {
-        return offsetMinus(now(), PREVIOUS);
+    public static Date preMinutes() {
+        return offsetMinutes(now(), PREVIOUS);
     }
 
     /**
@@ -259,8 +268,8 @@ public class ZJDateUtil {
      * @param date
      * @return 返回一个java.util.Date的时间实例
      */
-    public static Date nextMinus(Date date) {
-        return offsetMinus(date, NEXT);
+    public static Date nexMinutes(Date date) {
+        return offsetMinutes(date, NEXT);
     }
 
     /**
@@ -268,8 +277,8 @@ public class ZJDateUtil {
      *
      * @return 返回一个java.util.Date的时间实例
      */
-    public static Date nextMinus() {
-        return offsetMinus(now(), NEXT);
+    public static Date nextMinutes() {
+        return offsetMinutes(now(), NEXT);
     }
 
     /**
@@ -290,7 +299,7 @@ public class ZJDateUtil {
      * @return 返回一个java.util.Date的时间实例
      */
     public static Date parseDate(String dateStr, String pattern) {
-        return DateTimeFormat.forPattern(pattern).parseDateTime(dateStr).toDate();
+        return getDate(LocalDateTime.parse(dateStr, getDateFormatter(pattern)));
     }
 
     /**
@@ -301,9 +310,10 @@ public class ZJDateUtil {
      * @return 返回一个时间给定的字符串格式
      */
     public static String formatDate(Date date, String pattern) {
-        dateTime = new DateTime(date.getTime());
-        return dateTime.toString(pattern);
+
+        return getLocalDateTime(date).format(getDateFormatter(pattern));
     }
+
 
     /**
      * 根据指定的格式将日期转换成字符串
@@ -313,8 +323,8 @@ public class ZJDateUtil {
      * @return 返回一个时间给定的字符串格式
      */
     public static String formatDate(Long date, String pattern) {
-        dateTime = new DateTime(date);
-        return dateTime.toString(pattern);
+        LocalDateTime localDateTime = getLocalDateTime(new Date(date));
+        return localDateTime.format(getDateFormatter(pattern));
     }
 
     /**
@@ -325,8 +335,7 @@ public class ZJDateUtil {
      * @return 返回两个时间的比较结果
      */
     public static boolean compareDate(Date start, Date end) {
-        dateTime = new DateTime(start.getTime());
-        return dateTime.isBefore(end.getTime());
+        return getLocalDateTime(start).isBefore(getLocalDateTime(end));
     }
 
     /**
@@ -337,8 +346,8 @@ public class ZJDateUtil {
      * @return int 返回start和end日期之间相隔的月数
      */
     public static int getMonthNum(Date start, Date end) {
-        int num = Months.monthsBetween(getDateTime(start), getDateTime(end)).getMonths();
-        return Math.abs(num);
+        long num = ChronoUnit.MONTHS.between(getLocalDateTime(start), getLocalDateTime(end));
+        return Math.toIntExact(Math.abs(num));
     }
 
     /**
@@ -349,8 +358,8 @@ public class ZJDateUtil {
      * @return int 返回两个时间相隔多少天
      */
     public static int getDayNum(Date start, Date end) {
-        int num = Days.daysBetween(getDateTime(start), getDateTime(end)).getDays();
-        return Math.abs(num);
+        long num = ChronoUnit.DAYS.between(getLocalDateTime(start), getLocalDateTime(end));
+        return Math.toIntExact(Math.abs(num));
     }
 
     /**
@@ -361,8 +370,8 @@ public class ZJDateUtil {
      * @return 返回两个时间相隔多少小时
      */
     public static int getHourNum(Date start, Date end) {
-        int num = Hours.hoursBetween(getDateTime(start), getDateTime(end)).getHours();
-        return Math.abs(num);
+        long num = ChronoUnit.SECONDS.between(getLocalDateTime(start), getLocalDateTime(end));
+        return Math.toIntExact(Math.abs(num));
     }
 
     /**
@@ -373,8 +382,8 @@ public class ZJDateUtil {
      * @return 返回两个时间相隔多少分钟
      */
     public static int getMinusNum(Date start, Date end) {
-        int num = Minutes.minutesBetween(getDateTime(start), getDateTime(end)).getMinutes();
-        return Math.abs(num);
+        long num = ChronoUnit.MINUTES.between(getLocalDateTime(start), getLocalDateTime(end));
+        return Math.toIntExact(Math.abs(num));
     }
 
     /**
@@ -385,8 +394,8 @@ public class ZJDateUtil {
      * @return 返回两个时间相隔多少秒
      */
     public static int getSecondNum(Date start, Date end) {
-        int num = Seconds.secondsBetween(getDateTime(start), getDateTime(end)).getSeconds();
-        return Math.abs(num);
+        long num = ChronoUnit.SECONDS.between(getLocalDateTime(start), getLocalDateTime(end));
+        return Math.toIntExact(Math.abs(num));
     }
 
     /**
@@ -415,18 +424,9 @@ public class ZJDateUtil {
      * @return boolean 返回是否是闰年
      */
     public static Boolean isLeapYear(Date date) {
-        return getDateTime(date).yearOfEra().isLeap();
+        return getLocalDateTime(date).toLocalDate().isLeapYear();
     }
 
-    /**
-     * 判断当前传入的时间是否是闰月
-     *
-     * @param date
-     * @return boolean 判断是否是闰月
-     */
-    public static Boolean isLeapMonth(Date date) {
-        return getDateTime(date).monthOfYear().isLeap();
-    }
 
     /**
      * 获取当前传入时间的月份X
@@ -435,7 +435,7 @@ public class ZJDateUtil {
      * @return int 获取当前时间的月份
      */
     public static int getMonthNum(Date date) {
-        return getDateTime(date).monthOfYear().get();
+        return getLocalDateTime(date).getMonthValue();
     }
 
     /**
@@ -445,7 +445,7 @@ public class ZJDateUtil {
      * @return int 获取当前时间的是一周的第几天
      */
     public static int getWeekNum(Date date) {
-        return getDateTime(date).dayOfWeek().get();
+        return getLocalDateTime(date).getDayOfWeek().getValue();
     }
 
     /**
@@ -529,7 +529,6 @@ public class ZJDateUtil {
      */
     public static String getSecond(Date date) {
         String second = formatDate(date, "ss");
-        ;
         return second;
     }
 
