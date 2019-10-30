@@ -1,9 +1,13 @@
 package com.example.demozjcloudcore.helper;
 
+import java.io.File;
+
 public class TestMain {
     public static void main(String[] args) {
-        System.out.println(ZJDateUtil.parseDate(ZJDateUtil.formatDate(ZJDateUtil.now(),ZJDateUtil.FORMAT_TYPE_1),ZJDateUtil.FORMAT_TYPE_2));
-
+        File f = new File("d:/");
+        for (File file : f.listFiles()) {
+            System.out.println(file.getName());
+        }
 
     }
 }
