@@ -1,13 +1,9 @@
 package com.example.demozjcloudcore.helper;
 
-import java.io.File;
+import java.time.LocalDateTime;
 
 public class TestMain {
     public static void main(String[] args) {
-        File f = new File("d:/");
-        for (File file : f.listFiles()) {
-            System.out.println(file.getName());
-        }
-
+        System.out.println(LocalDateTime.now());
     }
 }
